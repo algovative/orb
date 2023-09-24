@@ -18,15 +18,10 @@ parameters:
     description: steps to run if the package is found
 steps:
   - run:
-      command: |
-        if (npm run -s check-versions | grep -qF "<<parameters.package-name>>") ; then
-          echo "package <<parameters.package-name>> found, executing the rest of the steps"
-          npm run app:version
-          echo "export <<parameters.tag-variable>>=$(npm run current-version -w=<<parameters.folder>> --silent)" >> "$BASH_ENV"
-          source "$BASH_ENV"
-        else
-          echo "package <<parameters.package-name>> not tagged. Stopping the job"
-          circleci-agent step halt
-        fi
+      environment:
+        PACKAGE_NAME: <<parameters.package-name>>
+        FOLDER: <<parameters.folder>>
+        TAG_VARIABLE: <<parameters.tag-variable>>
+      command: <<include(scripts/check.sh)>>
       name: checking if <<parameters.package-name>> is tagged
   - steps: <<parameters.steps-to-run>>
