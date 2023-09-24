@@ -10,10 +10,10 @@ parameters:
   folder:
     type: string
     description: folder the package is in
-  tag-variable:
+  tag_variable:
     type: env_var_name
     description: name of the variable to store the tag
-  steps-to-run:
+  steps_to_run:
     type: steps
     description: steps to run if the package is found
 steps:
@@ -21,7 +21,7 @@ steps:
       environment:
         PACKAGE_NAME: <<parameters.package_name>>
         FOLDER: <<parameters.folder>>
-        TAG_VARIABLE: <<parameters.tag-variable>>
+        TAG_VARIABLE: <<parameters.tag_variable>>
       command: <<include(scripts/check.sh)>>
       name: checking if <<parameters.package_name>> is tagged
-  - steps: <<parameters.steps-to-run>>
+  - steps: <<parameters.steps_to_run>>
