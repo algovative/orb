@@ -1,0 +1,22 @@
+description: >
+  example usage for algovative/run-if-tagged.
+# Provide a use-case based example for using this orb.
+# Everything in the `usage` section will be displayed in the orb registry.
+# Comments are not retained.
+usage:
+  version: 2.1
+  orbs:
+    algovative: algovative/ci-tools@1.0.0
+  workflows:
+    use-my-orb:
+      jobs:
+        - build
+  jobs:
+    build:
+      - algovative/run-if-tagged:
+          package-name: '@algovative/web'
+          folder: ./apps/web
+          tag-variable: WEB_IMG_TAG
+          steps-to-run:
+            - setup_remote_docker:
+                docker_layer_caching: false

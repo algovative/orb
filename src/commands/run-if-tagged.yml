@@ -1,0 +1,32 @@
+description: >
+  run the steps if the package is among those to be released. it assumes the existence of some npm scripts:
+  npm run check-versions: outputs a list of the packages to be tagged
+  npm run app:version: updates the packages versions
+  npm run current-version: outputs the package current version
+parameters:
+  package-name:
+    type: string
+    description: name of the package
+  folder:
+    type: string
+    description: folder the package is in
+  tag-variable:
+    type: env_var_name
+    description: name of the variable to store the tag
+  steps-to-run:
+    type: steps
+    description: steps to run if the package is found
+steps:
+  - run:
+      command: |
+        if (npm run -s check-versions | grep -qF "<<parameters.package-name>>") ; then
+          echo "package <<parameters.package-name>> found, executing the rest of the steps"
+          npm run app:version
+          echo "export <<parameters.tag-variable>>=$(npm run current-version -w=<<parameters.folder>> --silent)" >> "$BASH_ENV"
+          source "$BASH_ENV"
+        else
+          echo "package <<parameters.package-name>> not tagged. Stopping the job"
+          circleci-agent step halt
+        fi
+      name: checking if <<parameters.package-name>> is tagged
+  - steps: <<parameters.steps-to-run>>
