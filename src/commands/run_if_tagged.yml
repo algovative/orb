@@ -1,10 +1,10 @@
-description: >
+description: |
   run the steps if the package is among those to be released. it assumes the existence of some npm scripts:
   npm run check-versions: outputs a list of the packages to be tagged
   npm run app:version: updates the packages versions
   npm run current-version: outputs the package current version
 parameters:
-  package-name:
+  package_name:
     type: string
     description: name of the package
   folder:
@@ -19,9 +19,9 @@ parameters:
 steps:
   - run:
       environment:
-        PACKAGE_NAME: <<parameters.package-name>>
+        PACKAGE_NAME: <<parameters.package_name>>
         FOLDER: <<parameters.folder>>
         TAG_VARIABLE: <<parameters.tag-variable>>
       command: <<include(scripts/check.sh)>>
-      name: checking if <<parameters.package-name>> is tagged
+      name: checking if <<parameters.package_name>> is tagged
   - steps: <<parameters.steps-to-run>>
