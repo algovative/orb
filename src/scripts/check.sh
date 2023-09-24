@@ -1,3 +1,4 @@
+#!/bin/bash
 if (npm run -s check-versions | grep -qF "$PACKAGE_NAME") ; then
     echo "package $PACKAGE_NAME found, executing the rest of the steps"
     npm run app:version
